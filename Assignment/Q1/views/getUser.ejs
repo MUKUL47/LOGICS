@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<Title>
+    Community
+</Title>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <link rel="stylesheet" href="/user.css">
+</head>
+
+<body>
+    <a href="/">
+        <h1 class="ui header" id="fH1">I am Here</h1>
+    </a>
+    <a href="/getCommunity/<%=c%>">
+        <h1 class="ui header" id="fH1"><%=community%></h1>
+    </a>
+    <h1 class="ui header" id="fH"><%=details.membername%></h1>
+    <center>
+        <div id="tb">
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>no. of searches</th>
+                        <th>no. of posts</th>
+                        <th>no. of calls</th>
+                        <th>total-likes</th>
+                        <th>total-comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h3><%=details.memberid%></h3>
+                        </td>
+                        <td>
+                            <h3><%=details.noofsearches%></h3>
+                        </td>
+                        <td>
+                            <h2><%=details.noofposts%></h2>
+                        </td>
+                        <td>
+                            <h2><%=details.noofcalls%></h2>
+                        </td>
+                        <td>
+                            <h2><%=details.totallikes%></h2>
+                        </td>
+                        <td>
+                            <h2><%=details.totalcomments%></h2>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </center>
+
+</body>
+
+
+</html>

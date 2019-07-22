@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<Title>
+    Community
+</Title>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <link rel="stylesheet" href="/comm.css">
+</head>
+
+<body>
+    <a href="/">
+        <h1 class="ui header" id="fH1">I am Here</h1>
+    </a>
+    <h1 class="ui header" id="fH"><%=name.name%></h1>
+    <center>
+        <div id="tb">
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Username</th>
+                        <th>PhoneNumber</th>
+                        <th>Change membership</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%(name.members).forEach((data,i)=>{%>
+                    <tr>
+                        <td>
+                            <%=i+1%>
+                        </td>
+                        <td>
+                            <form action="/<%=comm%>/member/<%=i%>" method="GET" id="nameForm">
+                                <button class="ui inverted red button"><%=data.membername%></button>
+                            </form>
+                        </td>
+                        <td>
+                            <h3><%=Math.floor(Math.random() * Math.floor(1239998987));%></h3>
+                        </td>
+                        <td>
+                            <h2>Current : <%=data.status%></h2>
+                            <form action="/<%=comm%>/getCommunity/<%=i%>" method="post" id="nameForm">
+                                <select name="status" class="ui search dropdown" onchange="this.form.submit()">
+                                    <option value="pending">Change status</option>
+                                    <option value="pending">pending</option>
+                                    <option value="approved">approved</option>
+                                    <option value="rejected">rejected</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    <%})%>
+                </tbody>
+            </table>
+        </div>
+    </center>
+
+</body>
+
+
+</html>

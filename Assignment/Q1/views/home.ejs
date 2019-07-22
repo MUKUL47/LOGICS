@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<Title>
+    Home
+</Title>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./home.css" />
+</head>
+
+<body>
+
+    <h1 class="ui header" id="fH">I am Here</h1>
+    <center>
+        <h2>Communities found : <%=mockData.ncommunities%></h2>
+        <div class="ui divider"></div>
+        <%mockData.communities.forEach((data,i)=>{%>
+        <div id="textLayout">
+            <div class="ui inverted segment">
+                <h4 class="ui horizontal inverted divider">
+                    <%=data.name%>
+                </h4>
+
+                <img id="img" src=<%=data.image%> />
+                <h3>Members : <%=data.nmembers%></h3>
+                <form method="get" action="/getCommunity/<%=i%>">
+                    <button class="ui inverted button">SHOW</button>
+
+                </form>
+            </div>
+        </div>
+        <div class="ui divider"></div>
+        <%})%>
+    </center>
+
+</body>
+
+</html>

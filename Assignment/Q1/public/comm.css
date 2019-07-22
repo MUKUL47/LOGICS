@@ -1,0 +1,35 @@
+body {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(80, 80, 131, 1) 49%, rgba(0, 212, 255, 1) 100%);
+}
+
+#fH1 {
+    margin-top: 1%;
+    margin-right: 15%;
+    margin-left: 15%;
+    background-color: black;
+    opacity: 0.745;
+    font-size: 55px;
+    color: aliceblue;
+    text-align: center;
+}
+
+#fH {
+    margin-top: 1%;
+    margin-right: 15%;
+    margin-left: 15%;
+    background-color: black;
+    opacity: 0.745;
+    font-size: 55px;
+    color: aliceblue;
+    text-align: center;
+}
+
+#tb {
+    margin-right: 15%;
+    margin-left: 15%;
+}
+
+#fH1:hover {
+    transform: scale(1.1);
+}
