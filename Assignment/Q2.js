@@ -1,6 +1,6 @@
 function find_3QuestionMark_Between10_Optimized(s) {
   /*
-    Algo : O(n)  worst
+    Algo : O(n) : worst O(5) BEST (2???8) length = 5
     1)Iterate array first time check if there a occurrence of a number
         1.1)then store that number somewhere and check how many times '?' occuring and keep incrementing
         1.2)then later on if any other number occurs check if prev number + this is 10 and '?' occured previouse is 3
