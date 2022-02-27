@@ -2,82 +2,92 @@ package Stack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.Stack;
+import java.util.TreeMap;
 
 public class Atoms {
     public static void main(String s[]) {
-        Map<String, Integer> map = new HashMap<>();
-        String formula = "K4(ON(SO3)2)2";
+        Map<String, Integer> map = new TreeMap<>();
+        String formula = "Mg((H2O)2Na)4(F)(H2SO4)N";
         calculateFormula(formula, map, 1);
-        System.out.println(map);
+        String finalFormula = "";
+        for (Map.Entry<String, Integer> m : map.entrySet()) {
+            int val = m.getValue();
+            finalFormula += m.getKey() + "" + (val > 1 ? val : "");
+        }
+        System.out.println(finalFormula);
     }
 
     public static void calculateFormula(String formula, Map<String, Integer> map, int size) {
-        System.out.println(formula + " " + map + " " + size);
-        Stack<Character> stack = new Stack<Character>();
+        String tempFormula = "";
         int index = 0;
-        String atomSize = "";
-        int nestedBrackets = 0;
-        boolean isNestedFormula = false;
-        while (index <= formula.length()) {
-            if (index == formula.length()) {
-                if (isNestedFormula) {
-                    calculateFormula(getFormula(stack), map, atomSize.length() > 0 ? Integer.parseInt(atomSize) : 1);
-                    break;
-                }
-                String remainingFormula = getFormula(stack);
-                if (remainingFormula.length() > 0) {
-                    map.put(remainingFormula, atomSize.length() > 0 ? Integer.parseInt(atomSize) * size : size);
-                }
-                break;
-            }
+        int atomSize = 1;
+        Stack<Character> stack = new Stack<>();
+        boolean isNested = false;
+        boolean isLastAtom = false;
+        while (index < formula.length()) {
             char currentC = formula.charAt(index);
-            boolean isNotLower = (int) currentC >= 97 && (int) currentC < 123;
-            boolean isNestedParen = currentC == '(' || currentC == ')';
-            if (!isNotLower && !stack.empty() && nestedBrackets == 0) {
-                char peek = stack.peek();
-                // check if is number
-                if (charCode("INTEGER", currentC)) {
-                    atomSize += currentC;
-                }
-                // uppercase or lower
-                else if (charCode("UPPERCASE", peek) || charCode("LOWERCASE", peek) || isNestedFormula) {
-                    String remainingFormula = getFormula(stack);
-                    if (isNestedFormula) {
-                        isNestedFormula = false;
-                        calculateFormula(remainingFormula, map,
-                                atomSize.length() > 0 ? Integer.parseInt(atomSize) : 1);
-                        atomSize = "";
+            boolean isNotLower = !charCode("LOWERCASE", currentC);
+            boolean isParen = currentC == '(' || currentC == ')';
+            if (isNotLower &&
+                    stack.empty() &&
+                    currentC != '(' &&
+                    tempFormula.length() > 0) {
+                boolean isAtomSize = charCode("INTEGER", currentC);
+                if (isAtomSize) {
+                    atomSize = !isLastAtom
+                            ? Integer.parseInt(String.valueOf(currentC))
+                            : atomSize * 10 + Integer.parseInt(String.valueOf(currentC));
+                    isLastAtom = true;
+                } else {
+                    if (isNested) {
+                        calculateFormula(tempFormula, map, atomSize * size);
                     } else {
-                        if (remainingFormula.length() > 0) {
-                            map.put(remainingFormula, atomSize.length() > 0 ? Integer.parseInt(atomSize) * size : size);
-                        }
-                        if (isNestedParen) {
-                            nestedBrackets = nestedBrackets + (currentC == '(' ? 1 : -1);
-                            isNestedFormula = true;
-                        }
+                        addToMap(tempFormula, map, size, atomSize);
                     }
-                    if (!isNestedFormula)
-                        stack.push(currentC);
+                    atomSize = 1;
+                    tempFormula = currentC + "";
+                    isLastAtom = false;
                 }
             } else {
-                if (isNestedParen) {
-                    nestedBrackets = nestedBrackets + (currentC == '(' ? 1 : -1);
-                    isNestedFormula = true;
-                } else {
-                    stack.push(currentC);
-                    atomSize = "";
+                if (isParen) {
+                    isLastAtom = false;
+                    if (currentC == '(' && tempFormula.length() > 0 && stack.isEmpty()) {
+                        calculateFormula(tempFormula, map, atomSize * size);
+                        tempFormula = "";
+                        atomSize = 1;
+                    } else if (tempFormula.length() > 0 && !isNested && currentC == '(') {
+                        addToMap(tempFormula, map, size, atomSize);
+                        tempFormula = "";
+                    }
+                    isNested = true;
+                    if (!stack.isEmpty() && stack.peek() == '(' && currentC == ')') {
+                        stack.pop();
+                    } else {
+                        stack.push(currentC);
+                    }
                 }
+                if (!isParen
+                        || (isParen && (stack.size() > 1 && currentC == '(' || !stack.isEmpty() && currentC == ')'))) {
+                    tempFormula += currentC;
+                }
+            }
+            if (index == formula.length() - 1) {
+                if (isNested || currentC == ')')
+                    calculateFormula(tempFormula, map, atomSize * size);
+                else
+                    addToMap(tempFormula, map, size, atomSize);
             }
             index++;
         }
     }
 
-    public static String getFormula(Stack<Character> stack) {
-        String f = "";
-        while (!stack.isEmpty())
-            f = stack.pop() + f;
-        return f;
+    public static void addToMap(String formula, Map<String, Integer> map, int size, int atomSize) {
+        boolean exists = map.containsKey(formula);
+        map.put(formula, !exists ? atomSize * size
+                : map.get(formula) +
+                        (atomSize) * size);
     }
 
     public static boolean charCode(String type, char c) {
@@ -87,7 +97,7 @@ public class Atoms {
             case "LOWERCASE":
                 return (int) c >= 97 && (int) c < 123;
             case "INTEGER":
-                return (int) c >= 49 && (int) c < 58;
+                return (int) c >= 48 && (int) c < 58;
             default:
                 throw new Error("INVALID CHAR CODE");
         }
